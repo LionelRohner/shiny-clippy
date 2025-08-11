@@ -4,14 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shiny Clippy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- #DAE1F0; -->
     <style>
-        #clipboardText {
-            width: 800px;
-            height: 400px;
-            border: 1px solid #ccc;
-            padding: 10px;
+        body {
+            padding: 20px;
+            background: linear-gradient(135deg, #EB7893, #7969F0);
+            min-height: 100vh;
+            margin: 0;
             font-family: Arial, sans-serif;
-            overflow: auto;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-family: 'Press Start 2P', cursive; /* Apply the chosen font */
+            font-variant: small-caps; /* Set text to small caps */
+            font-size:44px;
+            color: #260230;
+        }
+        #clipboardText {
+            min-height: 200px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 0 auto;
+            width: 80%;
+            max-width: 800px;
+            border: 1px solid #ccc;
+            background-color: rgba(218, 225, 240, 0.15);
+            color: #18011F; /* Change the text color in the clipboard field */
         }
     </style>
 </head>
