@@ -4,41 +4,193 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shiny Clippy</title>
+    <!-- Import the pixelated font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <!-- #DAE1F0; -->
     <style>
+        /* Define CSS variables for both light and dark themes */
+        :root {
+            --text-color: #18011F;                     /* Default text color for light mode */
+            --clipboard-bg: rgba(242, 250, 247, 0.3);  /* Semi-transparent clipboard background for light mode */
+            --shadow-color: rgba(0, 0, 0, 0.1);        /* Shadow color for light mode */
+            --border-color: #ccc;                      /* Border color for light mode */
+            --gradient-light: linear-gradient(135deg, #EB7893, #7969F0);  /* Light theme gradient (pink to purple) */
+            --gradient-dark: linear-gradient(135deg, #1a1a2e, #4a1f6c);   /* Dark theme gradient (dark blue to darker blue) */
+            --clipboard-bg-dark: rgba(30, 30, 40, 0.5); /* Semi-transparent clipboard background for dark mode */
+        }
+
+        /* Base body styles for light mode */
         body {
             padding: 20px;
-            background: linear-gradient(135deg, #EB7893, #7969F0);
-            min-height: 100vh;
+            background: var(--gradient-light);  /* Apply light gradient background */
+            min-height: 100vh;                   /* Ensure gradient covers full viewport height */
             margin: 0;
             font-family: Arial, sans-serif;
+            transition: background 0.5s ease;    /* Smooth transition when changing themes */
+            color: var(--text-color);            /* Set default text color */
         }
+
+        /* Styles applied when dark mode is active */
+        body.dark-mode {
+            --text-color: #f0f0f0;                     /* Light text color for dark mode */
+            --clipboard-bg: rgba(30, 30, 40, 0.5); /* Use dark clipboard background */
+            --shadow-color: rgba(0, 0, 0, 0.3);        /* Darker shadow for dark mode */
+            --border-color: #444;                      /* Darker border for dark mode */
+            background: var(--gradient-dark);          /* Apply dark gradient background */
+            color: var(--text-color);                   /* Update text color for dark mode */
+        }
+
+        /* Header styling */
         h1 {
             text-align: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            font-family: 'Press Start 2P', cursive; /* Apply the chosen font */
-            font-variant: small-caps; /* Set text to small caps */
-            font-size:44px;
-            color: #260230;
+            margin: 20px auto;
+            font-family: 'Press Start 2P', cursive;  /* Use pixelated font */
+            font-variant: small-caps;                /* Convert text to small caps */
+            font-size: 44px;
+            color: var(--text-color);                /* Use theme-aware text color */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Add subtle text shadow for depth */
+            transition: color 0.3s ease;             /* Smooth color transition */
         }
+
+        /* Clipboard text area styling */
         #clipboardText {
             min-height: 400px;
-            border-radius: 5px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 0 15px var(--shadow-color);  /* Use theme-aware shadow color */
             padding: 20px;
-            margin: 0 auto;
+            margin: 20px auto;
             width: 80%;
             max-width: 800px;
-            border: 1px solid #ccc;
-            background-color: rgba(242, 250, 247, 0.3);
-            color: #18011F; /* Change the text color in the clipboard field */
+            border: 1px solid var(--border-color);    /* Use theme-aware border color */
+            background-color: var(--clipboard-bg);    /* Use theme-aware background */
+            color: var(--text-color);                 /* Use theme-aware text color */
+            outline: none;                            /* Remove default focus outline */
+            transition: all 0.3s ease;               /* Smooth transitions for all properties */
+            resize: none;                             /* Disable manual resizing */
+            overflow-y: auto;                         /* Enable vertical scrolling if content overflows */
+            font-family: 'Courier New', monospace;    /* Use monospace font for better readability */
+            font-size: 16px;
+            line-height: 1.5;                         /* Improve text readability */
         }
+
+        /* Container for the toggle button */
+        .toggle-container {
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        /* Toggle button styling */
+        .toggle-btn {
+            background: var(--text-color); /* Button background matches text color */
+            color:   #ffffff;  /* Dark text on light button */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;                      /* Rounded button */
+            font-family: 'Press Start 2P', cursive;  /* Match header font */
+            font-size: 16px;
+            cursor: pointer;                          /* Show pointer cursor on hover */
+            transition: all 0.3s ease;               /* Smooth transitions for all properties */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+        }
+
+        /* Button styling for dark mode */
+        body.dark-mode .toggle-btn {
+            background: #f0f0f0;                      /* Light button in dark mode */
+            color: #121212;                           /* Dark text on light button */
+        }
+
+        /* Hover effect for the toggle button */
+        .toggle-btn:hover {
+            transform: scale(1.05);                   /* Slightly enlarge button on hover */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);  /* More pronounced shadow on hover */
+        }
+
+        /* Placeholder text styling for empty clipboard */
+        #clipboardText:empty::before {
+            content: attr(placeholder);              /* Show placeholder text */
+            color: #888;                              /* Gray color for placeholder */
+            font-style: italic;                       /* Italicize placeholder text */
+        }
+
+        /* Footer styling - positioned absolutely halfway between clipboard and bottom */
+        .footer {
+            position: absolute;
+            bottom: 50%; /* Start at 50% from the bottom of the main-content container */
+            left: 50%;
+            transform: translate(-50%, 50%); /* Center horizontally and move down by 50% of its height */
+            color: var(--footer-color);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            transition: color 0.3s ease;
+            text-align: center;
+            width: 100%;
+        }
+
+
+        /* Footer styling */
+        .footer {
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            color: var(--footer-color);              /* Footer text color for light mode */
+            font-family: 'Consolas', monospace;  /* Match the header font */
+            font-size: 10px;
+            transition: color 0.3s ease;              /* Smooth color transition */
+        }
+
+        /* Footer styling in dark mode */
+        body.dark-mode .footer {
+            color: var(--footer-color-dark);         /* Footer text color for dark mode */
+        }
+
+        /* Hide dark mode footer text by default */
+        .footer-dark {
+            display: none;
+        }
+
+        /* Show dark mode footer text when in dark mode */
+        body.dark-mode .footer-light {
+            display: none;
+        }
+
+        body.dark-mode .footer-dark {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
+    <!-- Page header -->
     <h1>Shiny Clippy</h1>
-    <div id="clipboardText" contenteditable="true" placeholder="Paste your text here..."></div>
+
+    <!-- Dark mode toggle button container -->
+    <div class="toggle-container">
+        <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div>
+
+    <!-- Editable clipboard area -->
+    <div
+        id="clipboardText"
+        contenteditable="true"
+        placeholder="Dump your text here..."
+    ></div>
+
+    <!-- Footer with two versions of text -->
+    <div class="footer">
+        <span class="footer-light">Powered by Robo [【•】◡【•】]</span>
+        <span class="footer-dark">Created by Robo [【-】◡【-】] zZz</span>
+    </div>
+
+    <!-- JavaScript for toggling dark mode -->
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');  /* Toggle dark-mode class on body */
+
+            /* Update button text based on current mode */
+            const button = document.querySelector('.toggle-btn');
+            button.textContent = document.body.classList.contains('dark-mode')
+                ? 'Switch to Light Mode'
+                : 'Switch to Dark Mode';
+        }
+    </script>
 </body>
 </html>
