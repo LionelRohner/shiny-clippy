@@ -250,7 +250,7 @@
             const regex = new RegExp(escapedPatterns.join('|'), 'gi');
 
             // Replace all occurrences of the patterns with empty string
-            const redactedText = text.replace(regex, '');
+            const redactedText = text.replace(regex, '█████████');
 
             // Update the clipboard text
             clipboardText.innerText = redactedText;
