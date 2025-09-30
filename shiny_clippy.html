@@ -9,67 +9,96 @@
     <style>
         /* Define CSS variables for both light and dark themes */
         :root {
-            --text-color: #18011F;                     /* Default text color for light mode */
-            --clipboard-bg: rgba(242, 250, 247, 0.3);  /* Semi-transparent clipboard background for light mode */
-            --shadow-color: rgba(0, 0, 0, 0.1);        /* Shadow color for light mode */
-            --border-color: #ccc;                      /* Border color for light mode */
-            --gradient-light: linear-gradient(135deg, #EB7893, #7969F0);  /* Light theme gradient (pink to purple) */
-            --gradient-dark: linear-gradient(135deg, #1a1a2e, #4a1f6c);   /* Dark theme gradient (dark blue to darker blue) */
-            --clipboard-bg-dark: rgba(30, 30, 40, 0.5); /* Semi-transparent clipboard background for dark mode */
+            --text-color: #18011F;
+            --clipboard-bg: rgba(242, 250, 247, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --border-color: #ccc;
+            --gradient-light: linear-gradient(135deg, #EB7893, #7969F0);
+            --gradient-dark: linear-gradient(135deg, #1a1a2e, #4a1f6c);
+            --clipboard-bg-dark: rgba(30, 30, 40, 0.5);
+            --footer-color: rgba(0, 0, 0, 0.7);
+            --footer-color-dark: rgba(255, 255, 255, 0.8);
         }
 
         /* Base body styles for light mode */
         body {
             padding: 20px;
-            background: var(--gradient-light);  /* Apply light gradient background */
-            min-height: 100vh;                   /* Ensure gradient covers full viewport height */
+            background: var(--gradient-light);
+            min-height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
-            transition: background 0.5s ease;    /* Smooth transition when changing themes */
-            color: var(--text-color);            /* Set default text color */
+            transition: background 0.5s ease;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
         }
 
         /* Styles applied when dark mode is active */
         body.dark-mode {
-            --text-color: #f0f0f0;                     /* Light text color for dark mode */
-            --clipboard-bg: rgba(30, 30, 40, 0.5); /* Use dark clipboard background */
-            --shadow-color: rgba(0, 0, 0, 0.3);        /* Darker shadow for dark mode */
-            --border-color: #444;                      /* Darker border for dark mode */
-            background: var(--gradient-dark);          /* Apply dark gradient background */
-            color: var(--text-color);                   /* Update text color for dark mode */
+            --text-color: #f0f0f0;
+            --clipboard-bg: var(--clipboard-bg-dark);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --border-color: #444;
+            background: var(--gradient-dark);
+            color: var(--text-color);
         }
 
         /* Header styling */
         h1 {
             text-align: center;
             margin: 20px auto;
-            font-family: 'Press Start 2P', cursive;  /* Use pixelated font */
-            font-variant: small-caps;                /* Convert text to small caps */
+            font-family: 'Press Start 2P', cursive;
+            font-variant: small-caps;
             font-size: 44px;
-            color: var(--text-color);                /* Use theme-aware text color */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Add subtle text shadow for depth */
-            transition: color 0.3s ease;             /* Smooth color transition */
+            color: var(--text-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            transition: color 0.3s ease;
+        }
+
+        /* Main content container */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         /* Clipboard text area styling */
-        #clipboardText {
-            min-height: 400px;
+        #clipboardText, #redactPatterns {
+            min-height: 200px;
             border-radius: 8px;
-            box-shadow: 0 0 15px var(--shadow-color);  /* Use theme-aware shadow color */
+            box-shadow: 0 0 15px var(--shadow-color);
             padding: 20px;
-            margin: 20px auto;
+            margin: 0 auto;
             width: 80%;
             max-width: 800px;
-            border: 1px solid var(--border-color);    /* Use theme-aware border color */
-            background-color: var(--clipboard-bg);    /* Use theme-aware background */
-            color: var(--text-color);                 /* Use theme-aware text color */
-            outline: none;                            /* Remove default focus outline */
-            transition: all 0.3s ease;               /* Smooth transitions for all properties */
-            resize: none;                             /* Disable manual resizing */
-            overflow-y: auto;                         /* Enable vertical scrolling if content overflows */
-            font-family: 'Courier New', monospace;    /* Use monospace font for better readability */
+            border: 1px solid var(--border-color);
+            background-color: var(--clipboard-bg);
+            color: var(--text-color);
+            outline: none;
+            transition: all 0.3s ease;
+            resize: none;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
             font-size: 16px;
-            line-height: 1.5;                         /* Improve text readability */
+            line-height: 1.5;
+        }
+
+        /* Redact patterns text area styling */
+        #redactPatterns {
+            min-height: 100px;
+            border-top: 3px solid var(--border-color);
+        }
+
+        /* Container for buttons */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 10px auto;
+            width: 80%;
+            max-width: 800px;
         }
 
         /* Container for the toggle button */
@@ -78,53 +107,56 @@
             margin: 20px auto;
         }
 
-        /* Toggle button styling */
-        .toggle-btn {
-            background: var(--text-color); /* Button background matches text color */
-            color:   #ffffff;  /* Dark text on light button */
+        /* Button styling */
+        .toggle-btn, .redact-btn {
+            background: var(--text-color);
+            color: #ffffff;
             border: none;
             padding: 10px 20px;
-            border-radius: 20px;                      /* Rounded button */
-            font-family: 'Press Start 2P', cursive;  /* Match header font */
+            border-radius: 20px;
+            font-family: 'Press Start 2P', cursive;
             font-size: 16px;
-            cursor: pointer;                          /* Show pointer cursor on hover */
-            transition: all 0.3s ease;               /* Smooth transitions for all properties */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        /* Button styling for dark mode */
-        body.dark-mode .toggle-btn {
-            background: #f0f0f0;                      /* Light button in dark mode */
-            color: #121212;                           /* Dark text on light button */
+        /* Button styling in dark mode */
+        body.dark-mode .toggle-btn,
+        body.dark-mode .redact-btn {
+            background: #f0f0f0;
+            color: #121212;
         }
 
-        /* Hover effect for the toggle button */
-        .toggle-btn:hover {
-            transform: scale(1.05);                   /* Slightly enlarge button on hover */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);  /* More pronounced shadow on hover */
+        /* Hover effect for buttons */
+        .toggle-btn:hover,
+        .redact-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Placeholder text styling for empty clipboard */
-        #clipboardText:empty::before {
-            content: attr(placeholder);              /* Show placeholder text */
-            color: #888;                              /* Gray color for placeholder */
-            font-style: italic;                       /* Italicize placeholder text */
+        /* Placeholder text styling */
+        #clipboardText:empty::before,
+        #redactPatterns:empty::before {
+            content: attr(placeholder);
+            color: #888;
+            font-style: italic;
         }
 
         /* Footer styling */
         .footer {
             text-align: center;
             padding: 10px;
-            margin-top: 20px;
-            color: var(--footer-color);              /* Footer text color for light mode */
-            font-family: 'Consolas', monospace;  /* Match the header font */
+            margin-top: auto;
+            color: var(--footer-color);
+            font-family: 'Consolas', monospace;
             font-size: 10px;
-            transition: color 0.3s ease;              /* Smooth color transition */
+            transition: color 0.3s ease;
         }
 
         /* Footer styling in dark mode */
         body.dark-mode .footer {
-            color: var(--footer-color-dark);         /* Footer text color for dark mode */
+            color: var(--footer-color-dark);
         }
 
         /* Hide dark mode footer text by default */
@@ -140,7 +172,6 @@
         body.dark-mode .footer-dark {
             display: block;
         }
-
     </style>
 </head>
 <body>
@@ -152,12 +183,27 @@
         <button class="toggle-btn" onclick="toggleDarkMode()">Switch to Dark Mode</button>
     </div>
 
-    <!-- Editable clipboard area -->
-    <div
-        id="clipboardText"
-        contenteditable="true"
-        placeholder="Dump your text here..."
-    ></div>
+    <!-- Main content container -->
+    <div class="main-content">
+        <!-- Editable clipboard area -->
+        <div
+            id="clipboardText"
+            contenteditable="true"
+            placeholder="Dump your text here..."
+        ></div>
+
+        <!-- Redact patterns text area -->
+        <div
+            id="redactPatterns"
+            contenteditable="true"
+            placeholder="Enter patterns to redact (one per line). These will be removed from the text above when you click 'Redact'."
+        ></div>
+
+        <!-- Button container -->
+        <div class="button-container">
+            <button class="redact-btn" onclick="redactText()">Redact Text</button>
+        </div>
+    </div>
 
     <!-- Footer with two versions of text -->
     <div class="footer">
@@ -165,16 +211,52 @@
         <span class="footer-dark">Powered by Robo [【-】◡【-】] zZz</span>
     </div>
 
-    <!-- JavaScript for toggling dark mode -->
+    <!-- JavaScript for toggling dark mode and redacting text -->
     <script>
         function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');  /* Toggle dark-mode class on body */
-
-            /* Update button text based on current mode */
+            document.body.classList.toggle('dark-mode');
             const button = document.querySelector('.toggle-btn');
             button.textContent = document.body.classList.contains('dark-mode')
                 ? 'Switch to Light Mode'
                 : 'Switch to Dark Mode';
+        }
+
+        function redactText() {
+            // Get the text from both fields
+            const clipboardText = document.getElementById('clipboardText');
+            const redactPatterns = document.getElementById('redactPatterns');
+
+            // Get the text to process
+            let text = clipboardText.innerText;
+
+            // Get patterns to redact (one per line)
+            const patterns = redactPatterns.innerText.split('\n')
+                .map(pattern => pattern.trim())
+                .filter(pattern => pattern.length > 0); // Remove empty lines
+
+            // If no patterns, do nothing
+            if (patterns.length === 0) {
+                alert('Please enter patterns to redact in the box below.');
+                return;
+            }
+
+            // Create a regex pattern from all the patterns
+            // Escape special regex characters in each pattern
+            const escapedPatterns = patterns.map(pattern =>
+                pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            );
+
+            // Create a regex that matches any of the patterns (case insensitive)
+            const regex = new RegExp(escapedPatterns.join('|'), 'gi');
+
+            // Replace all occurrences of the patterns with empty string
+            const redactedText = text.replace(regex, '');
+
+            // Update the clipboard text
+            clipboardText.innerText = redactedText;
+
+            // Show a confirmation message
+            alert(`Redacted ${patterns.length} pattern(s) from the text.`);
         }
     </script>
 </body>
