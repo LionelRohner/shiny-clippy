@@ -4,28 +4,35 @@ Shiny Clippy is a simple HTML-based solution designed to facilitate copying text
 
 ## Features
 
-- Simple and lightweight HTML page.
-- Preserves text formatting when copying from VM to host.
-- Easy to use with no additional software installation required.
+* Simple and lightweight HTML page.
+* Preserves text formatting when copying from VM to host.
+* **Redact Text**: enter one‑per‑line patterns to remove from the main clipboard text and click *Redact Text* to strip all occurrences (visual `sed 's/pattern/█████/g'`).  
+* Easy to use with no additional software installation required.
 
 ## How to Use
 
 1. **Open the HTML File**:
-   - Launch the Brave browser within your Arch Linux VM.
-   - Open the `shiny_clippy.html` file by navigating to it or using the command: `brave shiny_clippy.html`.
-   - Optionally, create an alias in your shell configuration file (e.g., `.bashrc`, `.zshrc`) for quicker access.
+   * Launch the Brave browser within your Arch Linux VM.
+   * Open the `shiny_clippy.html` file by navigating to it or using the command: `brave shiny_clippy.html`.
+   * Optionally, create an alias in your shell configuration file (e.g., `.bashrc`, `.zshrc`) for quicker access.
 
-2. **Copy and Paste Text**:
-   - Copy the desired text from any application within your VM.
-   - Paste the text into the text box on the Shiny Clippy page.
-   - Copy the text from the Shiny Clippy text box.
-   - Paste the text into any application on your Windows host.
+2. **Copy and Paste Text**
+   * Copy the desired text from any application within your VM.
+   * Paste the text into the main text box on the Shiny Clippy page.
+
+3. **Redact Sensitive Text (optional)**
+   * Enter patterns to remove, one per line, in the **Redaction Patterns** box.
+   * Click **Redact Text**; all occurrences of those patterns are removed from the main text.
+
+4. **Copy the Result**
+   * Copy the (optionally redacted) text from the Shiny Clippy text box.
+   * Paste the text into any application on your Windows host.
 
 ## Requirements
 
 As far as I know the issue seems to be restricted to Arch Linux with KDE Plasma 6 running in a VMware Workstation Pro virtual machine with a Windows 11 host system.
 
-- Brave browser installed in the Arch Linux VM. See here: https://brave.com/linux/
+* Brave browser installed in the Arch Linux VM. See here: https://brave.com/linux/
 
 ## Installation
 
