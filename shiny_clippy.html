@@ -87,8 +87,8 @@
 
         /* Redact patterns text area styling */
         #redactPatterns {
-            min-height: 100px;
-            border-top: 3px solid var(--border-color);
+            min-height: 25px;
+            border-top: 1px solid var(--border-color);
         }
 
         /* Container for buttons */
@@ -196,7 +196,7 @@
         <div
             id="redactPatterns"
             contenteditable="true"
-            placeholder="Enter patterns to redact (one per line). These will be removed from the text above when you click 'Redact'."
+            placeholder="Enter patterns to redact (one per line)."
         ></div>
 
         <!-- Button container -->
@@ -256,7 +256,7 @@
             clipboardText.innerText = redactedText;
 
             // Show a confirmation message
-            alert(`Redacted ${patterns.length} pattern(s) from the text.`);
+            //alert(`Redacted ${patterns.length} pattern(s) from the text.`);
         }
     </script>
 </body>
