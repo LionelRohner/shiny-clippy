@@ -11,10 +11,10 @@
     />
     <style>
       /*
-         * CSS VARIABLES SECTION
-         * These variables define the colors and styles used throughout the app
-         * They allow us to easily switch between light and dark themes
-         */
+        * CSS VARIABLES SECTION
+        * These variables define the colors and styles used throughout the app
+        * They allow us to easily switch between light and dark themes
+        */
       :root {
         --text-color: #18011f; /* Default text color for light mode */
         --clipboard-bg: rgba(
@@ -61,9 +61,9 @@
       }
 
       /*
-         * BODY STYLES - LIGHT MODE
-         * These styles apply to the entire page in light mode
-         */
+        * BODY STYLES - LIGHT MODE
+        * These styles apply to the entire page in light mode
+        */
       body {
         padding: 20px; /* Space around the edges of the page */
         background: var(
@@ -81,9 +81,9 @@
       }
 
       /*
-         * BODY STYLES - DARK MODE
-         * These styles override the light mode styles when dark mode is active
-         */
+        * BODY STYLES - DARK MODE
+        * These styles override the light mode styles when dark mode is active
+        */
       body.dark-mode {
         --text-color: #f0f0f0; /* Light text color for dark mode */
         --clipboard-bg: var(
@@ -96,9 +96,9 @@
       }
 
       /*
-         * HEADER STYLES
-         * Styles for the "Shiny Clippy" title at the top of the page
-         */
+        * HEADER STYLES
+        * Styles for the "Shiny Clippy" title at the top of the page
+        */
       h1 {
         text-align: center; /* Center the text */
         margin: 20px auto; /* Space above and below, center horizontally */
@@ -112,9 +112,9 @@
       }
 
       /*
-         * MAIN CONTENT CONTAINER
-         * This container holds the clipboard and redaction areas
-         */
+        * MAIN CONTENT CONTAINER
+        * This container holds the clipboard and redaction areas
+        */
       .main-content {
         flex-grow: 1; /* Take up available space */
         display: flex; /* Use flexbox for internal layout */
@@ -125,10 +125,10 @@
       }
 
       /*
-         * TEXT AREA STYLES (separated for clipboard and redaction areas)
-         * TODO: Boilerplaty
-         * These are the boxes where you type/paste text
-         */
+        * TEXT AREA STYLES (separated for clipboard and redaction areas)
+        * TODO: Boilerplaty
+        * These are the boxes where you type/paste text
+        */
       #clipboardText {
         flex: 1; /* grow to fill remaining space*/
         min-height: 0; /* allow shrinking below natural size */
@@ -178,18 +178,18 @@
       }
 
       /*
-         * REDACTION PATTERNS BOX SPECIFIC STYLES
-         * The box where you enter patterns to remove
-         */
+        * REDACTION PATTERNS BOX SPECIFIC STYLES
+        * The box where you enter patterns to remove
+        */
       #redactPatterns {
         min-height: 25px; /* Smaller minimum height */
         border-top: 1px solid var(--border-color); /* Top border for visual separation */
       }
 
       /*
-         * BUTTON CONTAINER
-         * Holds the redaction button (and could hold more buttons in future)
-         */
+        * BUTTON CONTAINER
+        * Holds the redaction button (and could hold more buttons in future)
+        */
       .button-container {
         display: flex; /* Use flexbox for layout */
         justify-content: center; /* Center buttons horizontally */
@@ -200,17 +200,17 @@
       }
 
       /*
-         * TOGGLE BUTTON CONTAINER
-         * Holds the dark/light mode toggle button
-         */
+        * TOGGLE BUTTON CONTAINER
+        * Holds the dark/light mode toggle button
+        */
       .toggle-container {
         text-align: center; /* Center the button */
         margin: 20px auto; /* Space above and below, center horizontally */
       }
 
       /*
-         * BUTTON STYLES (applies to both toggle and redaction buttons)
-         */
+        * BUTTON STYLES (applies to both toggle and redaction buttons)
+        */
       .toggle-btn,
       .redact-btn {
         background: var(
@@ -228,9 +228,9 @@
       }
 
       /*
-         * BUTTON STYLES IN DARK MODE
-         * Override button styles when dark mode is active
-         */
+        * BUTTON STYLES IN DARK MODE
+        * Override button styles when dark mode is active
+        */
       body.dark-mode .toggle-btn,
       body.dark-mode .redact-btn {
         background: #f0f0f0; /* Light background in dark mode */
@@ -238,9 +238,9 @@
       }
 
       /*
-         * BUTTON HOVER EFFECTS
-         * Visual feedback when hovering over buttons
-         */
+        * BUTTON HOVER EFFECTS
+        * Visual feedback when hovering over buttons
+        */
       .toggle-btn:hover,
       .redact-btn:hover {
         transform: scale(1.05); /* Slightly enlarge the button */
@@ -248,9 +248,9 @@
       }
 
       /*
-         * PLACEHOLDER TEXT STYLES
-         * The gray text that shows when a text area is empty
-         */
+        * PLACEHOLDER TEXT STYLES
+        * The gray text that shows when a text area is empty
+        */
       #clipboardText:empty::before,
       #redactPatterns:empty::before {
         content: attr(placeholder); /* Show the placeholder attribute content */
@@ -259,9 +259,9 @@
       }
 
       /*
-         * FOOTER STYLES
-         * The text at the bottom of the page
-         */
+        * FOOTER STYLES
+        * The text at the bottom of the page
+        */
       .footer {
         text-align: center; /* Center the text */
         padding: 10px; /* Internal spacing */
@@ -273,17 +273,17 @@
       }
 
       /*
-         * FOOTER STYLES IN DARK MODE
-         * Override footer styles when dark mode is active
-         */
+        * FOOTER STYLES IN DARK MODE
+        * Override footer styles when dark mode is active
+        */
       body.dark-mode .footer {
         color: var(--footer-color-dark); /* Dark mode footer color */
       }
 
       /*
-         * FOOTER TEXT TOGGLE
-         * Show different text in light/dark mode
-         */
+        * FOOTER TEXT TOGGLE
+        * Show different text in light/dark mode
+        */
       .footer-dark {
         display: none; /* Hide dark mode text by default */
       }
