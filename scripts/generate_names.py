@@ -36,28 +36,13 @@ def convert_to_pd(data: dict) -> pd.DataFrame:
 
 
 # Pattern: match any character NOT in Latin ranges (U+0000–U+024F)
+# TODO: Keep all extended latin chars?
 latin_regex = re.compile(r"[^\u0000-\u024F]")
 
 
 def is_latin(text: str, latin_regex: re.Pattern[str]) -> bool:
     return not bool(re.search(latin_regex, text))
 
-
-# test = [
-#     "ឡាំ យ៉ង",
-#     "Khemra",
-#     "Løvër",
-#     "Tynii",
-#     "សួុន.ឆៃយ៉ាទ្ធី.មានជយ័n",
-#     "Sokon",
-#     "Bakkeng",
-#     "Vännâk",
-#     "Mengly",
-#     "Preyveng",
-# ]
-#
-# for t in test:
-#     print(is_latin(t, latin_regex))
 
 # Get data ----
 
@@ -109,7 +94,7 @@ all_names_filtered["is_latin"] = all_names["name"].apply(
     lambda text: is_latin(text, latin_regex)
 )
 latin_names = all_names_filtered[all_names_filtered["is_latin"]]
-unique_names = latin_names["name"].unique()
+unique_names = latin_names["name"].sort_values().unique()
 
 # Write file
 with data_file.open("w+") as file:
