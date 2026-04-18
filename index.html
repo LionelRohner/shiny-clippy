@@ -337,6 +337,7 @@
         <!-- Click this to remove all patterns from the main text -->
         <!-- The redactText() function will replace matches with ***** -->
         <button class="redact-btn" onclick="redactText()">Redact Text</button>
+        <button class="redact-btn" onclick="redactNames()">Redact Names</button>
       </div>
     </div>
 
@@ -371,7 +372,7 @@
 
       /*
        * REDACT TEXT FUNCTION
-       * Replaces matched patterns with ***** in the main text
+       * Redacts matched patterns
        */
       function redactText() {
         // Get references to our text areas
@@ -421,6 +422,43 @@
 
         // Show a confirmation message with the number of patterns redacted
         // alert(`Successfully redacted ${patterns.length} pattern(s) from the text.`);
+      }
+      /*
+       * REDACT NAME FUNCTIONS
+       * Redacts common names
+       */
+      // Cache for the name list (loaded once)
+      let nameList = null;
+
+      async function loadNames() {
+        if (nameList) return nameList; // Return cached list if already loaded
+
+        const response = await fetch("data/names.txt");
+        const text = await response.text();
+        nameList = text.split("\n").filter((name) => name.trim().length > 0);
+        return nameList;
+      }
+
+      async function redactNames() {
+        const names = await loadNames(); // Load only on first click
+
+        const clipboardText = document.getElementById("clipboardText");
+        let text = clipboardText.innerText;
+
+        // Escape names for regex
+        const escapedNames = names.map((name) =>
+          name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+        );
+
+        // Create regex to match whole words (case insensitive)
+        const regex = new RegExp(
+          "\\b(" + escapedNames.join("|") + ")\\b",
+          "gi",
+        );
+
+        // Redact matches
+        const redactedText = text.replace(regex, "█████");
+        clipboardText.innerText = redactedText;
       }
     </script>
   </body>
