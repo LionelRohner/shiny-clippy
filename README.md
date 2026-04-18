@@ -23,3 +23,12 @@ It can now mostly be used to redact words from text or logs before pasting them 
 - **Copy the Result**
   - Copy the text from the Shiny Clippy text box.
   - Paste the text into any application on your Windows host.
+
+## Local Testing
+
+From root folder run one of the following to start a local development server:
+
+- `npx serve`
+- `python -m http.server 8000`
+
+Open localhost in browser for testing.
