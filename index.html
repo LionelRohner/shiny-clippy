@@ -4,300 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shiny Clippy</title>
-    <!-- Import the pixelated font from Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <style>
-      /*
-        * CSS VARIABLES SECTION
-        * These variables define the colors and styles used throughout the app
-        * They allow us to easily switch between light and dark themes
-        */
-      :root {
-        --text-color: #18011f; /* Default text color for light mode */
-        --clipboard-bg: rgba(
-          242,
-          250,
-          247,
-          0.3
-        ); /* Semi-transparent clipboard background for light mode */
-        --shadow-color: rgba(
-          0,
-          0,
-          0,
-          0.1
-        ); /* Shadow color for elements in light mode */
-        --border-color: #ccc; /* Border color for elements in light mode */
-        --gradient-light: linear-gradient(
-          135deg,
-          #eb7893,
-          #7969f0
-        ); /* Light theme gradient (pink to purple) */
-        --gradient-dark: linear-gradient(
-          135deg,
-          #1a1a2e,
-          #4a1f6c
-        ); /* Dark theme gradient (dark blue to darker blue) */
-        --clipboard-bg-dark: rgba(
-          30,
-          30,
-          40,
-          0.5
-        ); /* Semi-transparent clipboard background for dark mode */
-        --footer-color: rgba(
-          0,
-          0,
-          0,
-          0.7
-        ); /* Footer text color for light mode */
-        --footer-color-dark: rgba(
-          255,
-          255,
-          255,
-          0.8
-        ); /* Footer text color for dark mode */
-      }
-
-      /*
-        * BODY STYLES - LIGHT MODE
-        * These styles apply to the entire page in light mode
-        */
-      body {
-        padding: 20px; /* Space around the edges of the page */
-        background: var(
-          --gradient-light
-        ); /* Use the light gradient background */
-        height: 100vh; /* Make sure the body fills the whole screen height */
-        margin: 0; /* Remove default margins */
-        font-family: Arial, sans-serif; /* Default font for the page */
-        transition: background 0.5s ease; /* Smooth transition when changing themes */
-        color: var(--text-color); /* Default text color */
-        display: flex; /* Use flexbox for layout */
-        flex-direction: column; /* Stack elements vertically */
-        box-sizing: border-box;
-        overflow: hidden;
-      }
-
-      /*
-        * BODY STYLES - DARK MODE
-        * These styles override the light mode styles when dark mode is active
-        */
-      body.dark-mode {
-        --text-color: #f0f0f0; /* Light text color for dark mode */
-        --clipboard-bg: var(
-          --clipboard-bg-dark
-        ); /* Use dark clipboard background */
-        --shadow-color: rgba(0, 0, 0, 0.3); /* Darker shadow for dark mode */
-        --border-color: #444; /* Darker border for dark mode */
-        background: var(--gradient-dark); /* Apply dark gradient background */
-        color: var(--text-color); /* Update text color for dark mode */
-      }
-
-      /*
-        * HEADER STYLES
-        * Styles for the "Shiny Clippy" title at the top of the page
-        */
-      h1 {
-        text-align: center; /* Center the text */
-        margin: 20px auto; /* Space above and below, center horizontally */
-        font-family:
-          "Press Start 2P", cursive; /* Use the pixelated retro font */
-        font-variant: small-caps; /* Convert text to small caps */
-        font-size: 44px; /* Large font size */
-        color: var(--text-color); /* Use theme-aware text color */
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-        transition: color 0.3s ease; /* Smooth color transition when themes change */
-      }
-
-      /*
-        * MAIN CONTENT CONTAINER
-        * This container holds the clipboard and redaction areas
-        */
-      .main-content {
-        flex-grow: 1; /* Take up available space */
-        display: flex; /* Use flexbox for internal layout */
-        flex-direction: column; /* Stack elements vertically */
-        gap: 20px; /* Space between elements */
-        margin-bottom: 20px; /* Space before footer */
-        min-height: 0;
-      }
-
-      /*
-        * TEXT AREA STYLES (separated for clipboard and redaction areas)
-        * TODO: Boilerplaty
-        * These are the boxes where you type/paste text
-        */
-      #clipboardText {
-        flex: 1; /* grow to fill remaining space*/
-        min-height: 0; /* allow shrinking below natural size */
-        border-radius: 8px; /* Rounded corners */
-        box-shadow: 0 0 15px var(--shadow-color); /* Shadow for depth (changes with theme) */
-        padding: 20px; /* Internal spacing */
-        margin: 0 auto; /* Center horizontally */
-        width: 80%; /* Take 80% of the width */
-        max-width: 800px; /* Maximum width */
-        border: 1px solid var(--border-color); /* Border color (changes with theme) */
-        background-color: var(
-          --clipboard-bg
-        ); /* Background color (changes with theme) */
-        color: var(--text-color); /* Text color (changes with theme) */
-        outline: none; /* Remove default focus outline */
-        transition: all 0.3s ease; /* Smooth transitions for all properties */
-        resize: none; /* Disable manual resizing */
-        overflow-y: auto; /* Enable vertical scrolling if content overflows */
-        font-family:
-          "Courier New", monospace; /* Monospace font for better readability */
-        font-size: 16px; /* Font size */
-        line-height: 1.5; /* Line spacing for readability */
-      }
-      #redactPatterns {
-        flex: none; /* grow to fill remaining space*/
-        min-height: 0; /* allow shrinking below natural size */
-        height: 90px; /* */
-        border-radius: 8px; /* Rounded corners */
-        box-shadow: 0 0 15px var(--shadow-color); /* Shadow for depth (changes with theme) */
-        padding: 20px; /* Internal spacing */
-        margin: 0 auto; /* Center horizontally */
-        width: 80%; /* Take 80% of the width */
-        max-width: 800px; /* Maximum width */
-        border: 1px solid var(--border-color); /* Border color (changes with theme) */
-        background-color: var(
-          --clipboard-bg
-        ); /* Background color (changes with theme) */
-        color: var(--text-color); /* Text color (changes with theme) */
-        outline: none; /* Remove default focus outline */
-        transition: all 0.3s ease; /* Smooth transitions for all properties */
-        resize: none; /* Disable manual resizing */
-        overflow-y: auto; /* Enable vertical scrolling if content overflows */
-        font-family:
-          "Courier New", monospace; /* Monospace font for better readability */
-        font-size: 16px; /* Font size */
-        line-height: 1.5; /* Line spacing for readability */
-      }
-
-      /*
-        * REDACTION PATTERNS BOX SPECIFIC STYLES
-        * The box where you enter patterns to remove
-        */
-      #redactPatterns {
-        min-height: 25px; /* Smaller minimum height */
-        border-top: 1px solid var(--border-color); /* Top border for visual separation */
-      }
-
-      /*
-        * BUTTON CONTAINER
-        * Holds the redaction button (and could hold more buttons in future)
-        */
-      .button-container {
-        display: flex; /* Use flexbox for layout */
-        justify-content: center; /* Center buttons horizontally */
-        gap: 20px; /* Space between buttons */
-        margin: 10px auto; /* Center and add margin */
-        width: 80%; /* Match text area width */
-        max-width: 800px; /* Maximum width */
-      }
-
-      /*
-        * TOGGLE BUTTON CONTAINER
-        * Holds the dark/light mode toggle button
-        */
-      .toggle-container {
-        text-align: center; /* Center the button */
-        margin: 20px auto; /* Space above and below, center horizontally */
-      }
-
-      /*
-        * BUTTON STYLES (applies to both toggle and redaction buttons)
-        */
-      .toggle-btn,
-      .redact-btn {
-        background: var(
-          --text-color
-        ); /* Button background matches text color */
-        color: #ffffff; /* White text */
-        border: none; /* No border */
-        padding: 10px 20px; /* Internal spacing */
-        border-radius: 20px; /* Rounded corners */
-        font-family: "Press Start 2P", cursive; /* Match the header font */
-        font-size: 16px; /* Font size */
-        cursor: pointer; /* Show hand cursor on hover */
-        transition: all 0.3s ease; /* Smooth transitions for all properties */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-      }
-
-      /*
-        * BUTTON STYLES IN DARK MODE
-        * Override button styles when dark mode is active
-        */
-      body.dark-mode .toggle-btn,
-      body.dark-mode .redact-btn {
-        background: #f0f0f0; /* Light background in dark mode */
-        color: #121212; /* Dark text in dark mode */
-      }
-
-      /*
-        * BUTTON HOVER EFFECTS
-        * Visual feedback when hovering over buttons
-        */
-      .toggle-btn:hover,
-      .redact-btn:hover {
-        transform: scale(1.05); /* Slightly enlarge the button */
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
-      }
-
-      /*
-        * PLACEHOLDER TEXT STYLES
-        * The gray text that shows when a text area is empty
-        */
-      #clipboardText:empty::before,
-      #redactPatterns:empty::before {
-        content: attr(placeholder); /* Show the placeholder attribute content */
-        color: #888; /* Gray color */
-        font-style: italic; /* Italic text */
-      }
-
-      /*
-        * FOOTER STYLES
-        * The text at the bottom of the page
-        */
-      .footer {
-        text-align: center; /* Center the text */
-        padding: 10px; /* Internal spacing */
-        margin-top: auto; /* Push to bottom */
-        color: var(--footer-color); /* Footer text color (changes with theme) */
-        font-family: "Consolas", monospace; /* Monospace font */
-        font-size: 10px; /* Small font size */
-        transition: color 0.3s ease; /* Smooth color transition */
-      }
-
-      /*
-        * FOOTER STYLES IN DARK MODE
-        * Override footer styles when dark mode is active
-        */
-      body.dark-mode .footer {
-        color: var(--footer-color-dark); /* Dark mode footer color */
-      }
-
-      /*
-        * FOOTER TEXT TOGGLE
-        * Show different text in light/dark mode
-        */
-      .footer-dark {
-        display: none; /* Hide dark mode text by default */
-      }
-      body.dark-mode .footer-light {
-        display: none; /* Hide light mode text in dark mode */
-      }
-      body.dark-mode .footer-dark {
-        display: block; /* Show dark mode text in dark mode */
-      }
-    </style>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <!-- PAGE HEADER -->
-    <!-- This is the title at the top of the page -->
     <h1>Shiny Clippy</h1>
 
     <!-- DARK MODE TOGGLE BUTTON CONTAINER -->
@@ -311,10 +24,6 @@
     <!-- MAIN CONTENT CONTAINER -->
     <!-- This contains the clipboard and redaction areas -->
     <div class="main-content">
-      <!-- MAIN CLIPBOARD TEXT AREA -->
-      <!-- This is where you paste the text you want to work with -->
-      <!-- contenteditable="true" makes this div editable like a text area -->
-      <!-- placeholder shows when the div is empty -->
       <div
         id="clipboardText"
         contenteditable="true"
@@ -322,8 +31,6 @@
       ></div>
 
       <!-- REDACTION PATTERNS TEXT AREA -->
-      <!-- Enter patterns to remove here, one per line -->
-      <!-- For example: passwords, API keys, email addresses, etc. -->
       <div
         id="redactPatterns"
         contenteditable="true"
@@ -331,135 +38,19 @@
       ></div>
 
       <!-- BUTTON CONTAINER -->
-      <!-- Contains buttons for actions like redacting text -->
       <div class="button-container">
         <!-- REDACTION BUTTON -->
-        <!-- Click this to remove all patterns from the main text -->
-        <!-- The redactText() function will replace matches with ***** -->
         <button class="redact-btn" onclick="redactText()">Redact Text</button>
         <button class="redact-btn" onclick="redactNames()">Redact Names</button>
+        <button class="redact-btn" onclick="redactDates()">Redact Dates</button>
       </div>
     </div>
 
-    <!-- FOOTER -->
-    <!-- Shows who created this tool, with different text in light/dark mode -->
     <div class="footer">
       <span class="footer-light">Powered by Robo [【•】◡【•】]</span>
       <span class="footer-dark">Powered by Robo [【-】◡【-】] zZz</span>
     </div>
 
-    <!-- JAVASCRIPT FUNCTIONS -->
-    <script>
-      /*
-       * TOGGLE DARK MODE FUNCTION
-       * Switches between light and dark themes
-       */
-      function toggleDarkMode() {
-        // Toggle the 'dark-mode' class on the body element
-        // This triggers the CSS rules that change colors for dark mode
-        document.body.classList.toggle("dark-mode");
-
-        // Get the toggle button element
-        const button = document.querySelector(".toggle-btn");
-
-        // Update button text based on current mode
-        // If dark mode is active, show "Switch to Light Mode"
-        // Otherwise show "Switch to Dark Mode"
-        button.textContent = document.body.classList.contains("dark-mode")
-          ? "Switch to Light Mode"
-          : "Switch to Dark Mode";
-      }
-
-      /*
-       * REDACT TEXT FUNCTION
-       * Redacts matched patterns
-       */
-      function redactText() {
-        // Get references to our text areas
-        const clipboardText = document.getElementById("clipboardText");
-        const redactPatterns = document.getElementById("redactPatterns");
-
-        // Get the text to process from the clipboard
-        let text = clipboardText.innerText;
-
-        // Get patterns to redact (one per line)
-        // 1. Split by newlines to get each pattern
-        // 2. Trim whitespace from each pattern
-        // 3. Filter out any empty lines
-        const patterns = redactPatterns.innerText
-          .split("\n")
-          .map((pattern) => pattern.trim())
-          .filter((pattern) => pattern.length > 0);
-
-        // If no patterns were entered, show an alert and exit
-        if (patterns.length === 0) {
-          alert("Please enter patterns to redact in the box below.");
-          return;
-        }
-
-        // Escape special regex characters in each pattern
-        // This prevents errors if patterns contain characters like *, +, ?, etc.
-        // For example, if a pattern is "a+b", we need to escape the "+"
-        // The regex /[.*+?^${}()|[\]\\]/g finds these special characters
-        // The replace function adds a backslash before each special character
-        const escapedPatterns = patterns.map((pattern) =>
-          pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-        );
-
-        // Create a regex that matches any of our patterns (case insensitive)
-        // The 'gi' flags mean:
-        //   g = global (find all matches, not just the first)
-        //   i = case insensitive (match regardless of uppercase/lowercase)
-        const regex = new RegExp(escapedPatterns.join("|"), "gi");
-
-        // Replace all matches with '█████'
-        // The replace function takes a regex and a replacement string
-        // Every match will be replaced with five asterisks
-        const redactedText = text.replace(regex, "█████");
-
-        // Update the clipboard text with the redacted version
-        clipboardText.innerText = redactedText;
-
-        // Show a confirmation message with the number of patterns redacted
-        // alert(`Successfully redacted ${patterns.length} pattern(s) from the text.`);
-      }
-      /*
-       * REDACT NAME FUNCTIONS
-       * Redacts common names
-       */
-      // Cache for the name list (loaded once)
-      let nameList = null;
-
-      async function loadNames() {
-        if (nameList) return nameList; // Return cached list if already loaded
-
-        const response = await fetch("data/names.txt");
-        const text = await response.text();
-        nameList = text.split("\n").filter((name) => name.trim().length > 0);
-        return nameList;
-      }
-
-      async function redactNames() {
-        const names = await loadNames(); // Load only on first click
-
-        const clipboardText = document.getElementById("clipboardText");
-        let text = clipboardText.innerText;
-
-        // Escape names for regex
-        const escapedNames = names.map((name) =>
-          name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-        );
-
-        // Create regex to match whole words (case insensitive)
-        const regex = new RegExp(
-          "\\b(" + escapedNames.join("|") + ")\\b",
-          "gi",
-        );
-
-        // Redact matches
-        const redactedText = text.replace(regex, "█████");
-        clipboardText.innerText = redactedText;
-      }
-    </script>
+    <script src="js/script.js"></script>
   </body>
 </html>
